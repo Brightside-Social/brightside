@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Text, TouchableOpacity, View } from 'react-native';
-import { StackNavigationOptions } from '@react-navigation/stack';
+import { StackNavigationOptions, TransitionPresets } from '@react-navigation/stack';
 import { navigate } from '@/NavigationService';
 import { useSelector } from '@/store';
 import { ORANGE, WHITE } from '@/theme/colors';
@@ -38,6 +38,14 @@ export const headerOptions: StackNavigationOptions = {
       <BackArrow height={TWENTY_TWO} color={WHITE} />
     </View>
   ),
+};
+
+export const modalOptions: StackNavigationOptions = {
+  headerShown: false,
+  cardOverlayEnabled: true,
+  gestureEnabled: true,
+  ...TransitionPresets.FadeFromBottomAndroid,
+  cardStyle: { backgroundColor: 'transparent' },
 };
 
 export const NavHome = () => (

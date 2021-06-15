@@ -202,6 +202,7 @@ const renderTabBar = (props) => (
     {...props}
     indicatorStyle={{ backgroundColor: ORANGE }}
     style={styles.tabBar}
+    // tabStyle={{ width: 'auto', flex: 1 }}
     renderLabel={({ route, color }: { route: Route; color: string }) => (
       <View style={styles.tabContainer}>
         {route.badge && <View style={styles.badge} />}
@@ -216,21 +217,21 @@ const renderTabBar = (props) => (
     )}
     inactiveColor={GREY}
     activeColor={BLACK}
+  // bounces={true}
   />
 );
 
-type NotificationsRoute = RouteProp<
-  {
-    Notifications: {
-      type?: typeof CONNECTIONS_TYPE | typeof GROUPS_TYPE | typeof MISC_TYPE;
-    };
-  },
-  'Notifications'
->;
+// type NotificationsRoute = RouteProp<
+//   {
+//     Notifications: {
+//       type?: typeof CONNECTIONS_TYPE | typeof GROUPS_TYPE | typeof MISC_TYPE;
+//     };
+//   },
+//   'Notifications'
+// >;
 
 export const NotificationsScreen = () => {
   const dispatch = useDispatch();
-  const route = useRoute<NotificationsRoute>();
   const { t } = useTranslation();
   const api = useContext(NodeApiContext);
 
@@ -267,14 +268,11 @@ export const NotificationsScreen = () => {
       recoveryConnectionsPending,
     },
   ];
-  // if we navigate here from the banner, go to the section from the banner
+
   // if we navigate here normally, go to the first route with content, if any
+  const displayRoute = routes.findIndex(({ badge }) => badge)
 
-  const displayRoute = route.params?.type
-    ? routes.findIndex(({ key }) => key === route.params?.type)
-    : routes.findIndex(({ badge }) => badge);
-
-  const [index, setIndex] = useState(displayRoute);
+  const [index, setIndex] = useState(displayRoute > 0 ? displayRoute : 0);
 
   const renderScene = SceneMap({
     [CONNECTIONS_TYPE]: ConnectionsList,

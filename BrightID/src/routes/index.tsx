@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from '@/store';
 import NodeApiGate from '@/components/NodeApiGate';
-import { PersistGate } from 'redux-persist/es/integration/react';
+// import { PersistGate } from 'redux-persist/es/integration/react';
 import Apps from './Apps';
 import Backup from './Backup';
 import Connections from './Connections';
@@ -13,13 +13,14 @@ import Modals from './Modals';
 import PendingConnections from './PendingConnections';
 import Notifications from './Notifications';
 import Onboarding from './Onboarding';
+// import { modalOptions } from './helpers'
 
 const TopStack = createStackNavigator();
 const Stack = createStackNavigator();
 
 const MainTabs = () => {
   return (
-    <Stack.Navigator headerMode="screen">
+    <Stack.Navigator headerMode="screen" detachInactiveScreens={false}>
       {Home()}
       {PendingConnections()}
       {Connections()}
@@ -27,6 +28,11 @@ const MainTabs = () => {
       {Notifications()}
       {Apps()}
       {Modals()}
+      {/* <Stack.Screen
+        name="Modal"
+        component={Modals}
+        options={modalOptions}
+      /> */}
       {Backup()}
     </Stack.Navigator>
   );

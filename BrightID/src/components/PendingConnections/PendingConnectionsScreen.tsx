@@ -17,7 +17,7 @@ import { isEqual } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import Spinner from 'react-native-spinkit';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import ViewPager from '@react-native-community/viewpager';
+import PagerView from 'react-native-pager-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from '@/store';
 import { selectAllUnconfirmedConnections } from '@/components/PendingConnections/pendingConnectionSlice';
@@ -34,13 +34,13 @@ import BackArrow from '../Icons/BackArrow';
 ==================================================================
  *
  */
-const REFRESH_VIEWPAGER_TIMEOUT = 1000;
+const REFRESH_PAGERVIEW_TIMEOUT = 1000;
 
 export const PendingConnectionsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const viewPagerRef = useRef<ViewPager>(null);
+  const pagerViewRef = useRef<PagerView>(null);
 
   const pendingConnections = useSelector((state: State) => {
     return selectAllUnconfirmedConnections(state);
@@ -57,7 +57,7 @@ export const PendingConnectionsScreen = () => {
 
   const refreshDisplayConnections = useCallback(() => {
     /**
-     * this will cause the Viewpager to re render
+     * this will cause the PagerView to re render
      * for performance on android, we will limit the list to ~ 15 connections
      * */
 
@@ -113,13 +113,13 @@ export const PendingConnectionsScreen = () => {
   useEffect(() => {
     const goBack = () => {
       if (activeIndex > 0) {
-        viewPagerRef.current?.setPage(activeIndex - 1);
+        pagerViewRef.current?.setPage(activeIndex - 1);
         return true;
       }
     };
     BackHandler.addEventListener('hardwareBackPress', goBack);
     return () => BackHandler.removeEventListener('hardwareBackPress', goBack);
-  }, [viewPagerRef, activeIndex]);
+  }, [pagerViewRef, activeIndex]);
 
   // leave page if zero pending connections
   useEffect(() => {
@@ -128,7 +128,7 @@ export const PendingConnectionsScreen = () => {
       setLoading(true);
       timeout = setTimeout(() => {
         navigation.navigate('Connections');
-      }, REFRESH_VIEWPAGER_TIMEOUT);
+      }, REFRESH_PAGERVIEW_TIMEOUT);
     } else {
       setLoading(false);
     }
@@ -145,11 +145,11 @@ export const PendingConnectionsScreen = () => {
       const last = index === pendingConnectionsToDisplay.length - 1;
       const moveToNext = () => {
         /**
-        setting viewpager active index zero will trigger the list to re - render
+        setting pagerview active index zero will trigger the list to re - render
         */
         last
-          ? viewPagerRef.current?.setPage(0)
-          : viewPagerRef.current?.setPage(index + 1);
+          ? pagerViewRef.current?.setPage(0)
+          : pagerViewRef.current?.setPage(index + 1);
         setConfirmed((c) => c + 1);
       };
 
@@ -166,13 +166,13 @@ export const PendingConnectionsScreen = () => {
         </View>
       );
     };
-    console.log('RE-RENDERING VIEWPAGER');
+    console.log('RE-RENDERING PagerView');
 
     const Views = pendingConnectionsToDisplay.map(renderView);
 
     return (
-      <ViewPager
-        ref={viewPagerRef}
+      <PagerView
+        ref={pagerViewRef}
         style={{ flex: 1, width: '100%' }}
         initialPage={0}
         onPageSelected={(e) => {
@@ -183,7 +183,7 @@ export const PendingConnectionsScreen = () => {
         showPageIndicator={false}
       >
         {Views}
-      </ViewPager>
+      </PagerView>
     );
   }, [pendingConnectionsToDisplay]);
 

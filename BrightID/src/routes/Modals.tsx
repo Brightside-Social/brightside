@@ -1,8 +1,6 @@
 import React from 'react';
 import {
   createStackNavigator,
-  StackNavigationOptions,
-  TransitionPresets,
 } from '@react-navigation/stack';
 import FullScreenPhoto from '@/components/Helpers/FullScreenPhoto';
 import ChangePasswordModal from '@/components/EditProfile/ChangePasswordModal';
@@ -12,16 +10,9 @@ import ReportReasonModal from '@/components/Connections/ReportReasonModal';
 import SortConnectionsModal from '@/components/Helpers/SortConnectionsModal';
 import ViewPassword from '@/components/Onboarding/Walkthroughs/ViewPassword';
 import RecoveryCooldownInfoModal from '@/components/Recovery/RecoveryCooldownInfoModal';
+import { modalOptions } from './helpers'
 
 const Stack = createStackNavigator<ModalStackParamList>();
-
-const modalOptions: StackNavigationOptions = {
-  headerShown: false,
-  cardOverlayEnabled: true,
-  gestureEnabled: true,
-  ...TransitionPresets.FadeFromBottomAndroid,
-  cardStyle: { backgroundColor: 'transparent' },
-};
 
 const Modals = () => {
   return (
@@ -69,5 +60,7 @@ const Modals = () => {
     </>
   );
 };
+
+
 
 export default Modals;
